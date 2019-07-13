@@ -7,7 +7,8 @@
   + power,iota,(各个的用法？)
 
 注意：
-1. accumalate(first,last,i) i是传值进入函数内部的，在函数内部改变的i不会影响到外部，要获得"[first,last)的和"利用accumulate的返回值即可。inner_product也是如此。
+1. accumalate(first,last,i) i是传值进入函数内部的，在函数内部改变的i不会影响到外部，要获得 [first,last)的和 利用accumulate的返回值即可。inner_product也是如此。
+
 2. partial_sum和adjacent_different是可以是质变算法，当result不由输入流控制时，result=begin,那么就是in place的。
 
 测试代码：
