@@ -45,6 +45,7 @@ int main(){
 ```
 测试结果:
 ![1](C:\Users\Administrator\Desktop\to\img\1.png)
+
 ###基本算法
 ---
 + 各个容器迭代器种类：InputIterator,OutputIterator,ForwardIterator,BidirectionalIterator,RandomAccessIterator
@@ -70,15 +71,15 @@ heap| 无|
  *it=1;//插入1
 ```
 > + back_inserter 创建一个使用push_back的迭代器
+  eg: fill_n(back_inserter(v1),10,5)
+  
+  向空容器v1中插入10个5
 
- eg:c++ fill_n(back_inserter(v1),10,5)
- 
- 向空容器v1中插入10个5
 > + front_inserter 创建一个使用push_front的迭代器
 > + inserter 接受第二个参数是该容器的迭代器，将元素插入到该迭代器的前面。
-  eg:  copy(v1.begin(),v1.end(),inserter(v2.begin())
-  
-  将v1序列复制到空容器v2中
+ eg:  copy(v1.begin(),v1.end(),inserter(v2.begin())
+
+将v1序列复制到空容器v2中
 
 注意： front_inserter与inserter虽然都是向元素前插入序列但是却有所不同。比如从5 6 7 的6前插入序列1 2 3 4
 
@@ -92,11 +93,11 @@ inserter是      	 5 1 2 3 4 6 7
    该函数将容器内所有元素重置为value（不可对空容器使用）
    
    无返回值
-   +  fill_n(**Outputiterator** first,const int& n,const T&value)（question:插入迭代器,流迭代器属于什么类）
+   + fill_n(**Outputiterator** first,const int& n,const T&value)（question:插入迭代器,流迭代器属于什么类）
    
-   该函数对容器填入n个value
+    该函数对容器填入n个value
    
-   无返回值
+    无返回值
 2. + copy(RandomAccessIterator first,RandomAccessIterator last,**Outputiterator** result)
    
    该函数将容器内的元素复制到result所指的位置（result可在【first,last)中，但不保证成功）
