@@ -61,6 +61,7 @@ queue| 无|
 heap| 无|
 
 + 将一段元素插入一个空容器中：
+
   一是使用容器的成员函数insert.
 > + v.insert(p,b,e): 将迭代器b,e)之间的元素插入到p之前,b和e不能指向容器v.返回指向第一个新加元素的迭代器。若b,e)为空，则返回p
 > + v.insert(p,n,t): 将n个t插入到p之前，返回新添加的第一个元素的迭代器。
@@ -72,14 +73,11 @@ heap| 无|
 ```
 > + back_inserter 创建一个使用push_back的迭代器
   eg: fill_n(back_inserter(v1),10,5)
-  
   向空容器v1中插入10个5
 
 > + front_inserter 创建一个使用push_front的迭代器
 > + inserter 接受第二个参数是该容器的迭代器，将元素插入到该迭代器的前面。
- eg:  copy(v1.begin(),v1.end(),inserter(v2.begin())
-
-将v1序列复制到空容器v2中
+ eg:  copy(v1.begin(),v1.end(),inserter(v2.begin())将v1序列复制到空容器v2中
 
 注意： front_inserter与inserter虽然都是向元素前插入序列但是却有所不同。比如从5 6 7 的6前插入序列1 2 3 4
 
