@@ -47,6 +47,7 @@ int main(){
 ![1](C:\Users\Administrator\Desktop\to\img\1.png)
 
 ###基本算法
+
 ---
 + 各个容器迭代器种类：InputIterator,OutputIterator,ForwardIterator,BidirectionalIterator,RandomAccessIterator
 
@@ -129,21 +130,29 @@ inserter是      	 5 1 2 3 4 6 7
    返回判断结果不小于为true,大于为false
 
 5. mismatch(InputIterator first,InputIterator last)
+
    该函数找出两个序列的第一个不匹配点
+   
    返回一个pair，pair.first是第一个序列的不匹配点，pair.second是第二个序列的不匹配点
 6. max,min(const T& a,const T& b)
+
    找出两个元素的较大者
+   
    返回较大的元素
 7. + iter_swap(ForwardIterator a,ForwardIterator b)
+
    函数交换指针所指的值
+   
    无返回值
    + swap(const T& a,const T& b)
+   
    交换两个元素
+   
    无返回值
 
 测试代码
 ```c++
-	#include<iostream>
+#include<iostream>
 #include<algorithm>
 #include<vector>
 #include<iterator>
