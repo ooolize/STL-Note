@@ -46,55 +46,8 @@ int main(){
 测试结果:
 ![1](C:\Users\Administrator\Desktop\to\img\1.png)
 
-###基本算法
-
+### 基本算法
 ---
-+ 各个容器迭代器种类：InputIterator,OutputIterator,ForwardIterator,BidirectionalIterator,RandomAccessIterator
-
-迭代器种类|功能|支持的操作
----|---|---
-InputIterator|只读单向遍历迭代器|++
-OutputIterator|只写单向遍历迭代器|++
-ForwardIterator|可读可写单向遍历迭代器|++
-BidirectionalIterator|可读可写双向遍历迭代器|++ --
-RandomAccessIterator|可读可写随机访问迭代器|p+n,p-n,p[n],p1-p2,p1+p2
-
-容器|迭代器类型
-:---|:---|
-vector|RandomAccessIterators|
-list|BidirectionalIterators|
-slist|ForwardIterators|
-deque|RandomAccessIterator|
-stack|无 |
-queue| 无|
-heap| 无|
-
-另：插入迭代器是InputIterator,流迭代器是Input/OutputIterator，反向迭代器是取决于它的基础类型。
-
-+ 将一段元素插入一个空容器中：
-
-  一是使用容器的成员函数insert.
-> + v.insert(p,b,e): 将迭代器b,e)之间的元素插入到p之前,b和e不能指向容器v.返回指向第一个新加元素的迭代器。若b,e)为空，则返回p
-> + v.insert(p,n,t): 将n个t插入到p之前，返回新添加的第一个元素的迭代器。
-
-  二是使用插入迭代器:在头文件iterator中，接受容器参数，返回该容器的插入迭代器,实际上是调用容器的push_back(push_front)
-```c++
- auto it=back_insert(v1);
- *it=1;//插入1
-```
-> + back_inserter 创建一个使用push_back的迭代器
-  eg: fill_n(back_inserter(v1),10,5)
-  向空容器v1中插入10个5
-
-> + front_inserter 创建一个使用push_front的迭代器
-> + inserter 接受第二个参数是该容器的迭代器，将元素插入到该迭代器的前面。
- eg:  copy(v1.begin(),v1.end(),inserter(v2.begin())将v1序列复制到空容器v2中
-
-注意： front_inserter与inserter虽然都是向元素前插入序列但是却有所不同。比如从5 6 7 的6前插入序列1 2 3 4
-
-front_inserter是 5 4 3 2 1 6 7
-
-inserter是      	 5 1 2 3 4 6 7  
 
 + 基本算法：
 1. + fill(ForwardIterator first,ForwardIterator last,const T& value)
@@ -193,3 +146,126 @@ int main(){
 }
 ```
 测试结果:
+
++ 迭代器种类以及插入迭代器：
+> InputIterator,OutputIterator,ForwardIterator,BidirectionalIterator,RandomAccessIterator
+
+迭代器种类|功能|支持的操作
+---|---|---
+InputIterator|只读单向遍历迭代器|++
+OutputIterator|只写单向遍历迭代器|++
+ForwardIterator|可读可写单向遍历迭代器|++
+BidirectionalIterator|可读可写双向遍历迭代器|++ --
+RandomAccessIterator|可读可写随机访问迭代器|p+n,p-n,p[n],p1-p2,p1+p2
+
+容器|迭代器类型
+:---|:---|
+vector|RandomAccessIterators|
+list|BidirectionalIterators|
+slist|ForwardIterators|
+deque|RandomAccessIterator|
+stack|无 |
+queue| 无|
+heap| 无|
+
+另：插入迭代器是InputIterator,流迭代器是Input/OutputIterator，反向迭代器是取决于它的基础类型。
+
++ 将一段元素插入一个空容器中：
+
+  一是使用容器的成员函数insert.
+> + v.insert(p,b,e): 将迭代器b,e)之间的元素插入到p之前,b和e不能指向容器v.返回指向第一个新加元素的迭代器。若b,e)为空，则返回p
+> + v.insert(p,n,t): 将n个t插入到p之前，返回新添加的第一个元素的迭代器。
+
+  二是使用插入迭代器:在头文件iterator中，接受容器参数，返回该容器的插入迭代器,实际上是调用容器的push_back(push_front)
+```c++
+ auto it=back_insert(v1);
+ *it=1;//插入1
+```
+> + back_inserter 创建一个使用push_back的迭代器
+  eg: fill_n(back_inserter(v1),10,5)
+  向空容器v1中插入10个5
+
+> + front_inserter 创建一个使用push_front的迭代器
+> + inserter 接受第二个参数是该容器的迭代器，将元素插入到该迭代器的前面。
+ eg:  copy(v1.begin(),v1.end(),inserter(v2.begin())将v1序列复制到空容器v2中
+
+注意： front_inserter与inserter虽然都是向元素前插入序列但是却有所不同。比如从5 6 7 的6前插入序列1 2 3 4
+
+front_inserter是 5 4 3 2 1 6 7
+
+inserter是      	 5 1 2 3 4 6 7  
+
+### 数据处理:
+1. + find(InputIterator first ,Inputerator last,const T& value)
+
+   找出区间内第一个匹配的value值，
+   
+   返回指向该值的迭代器
+   + find_if(InputIterator first,InputerIterator last,**predicate** pred)
+   
+   找出第一个使一元谓词pred为true的元素
+   
+   返回该位置的迭代器
+   + adjacent_find(ForwardIterator first,ForwardIterator last,**BinaryPredicate** binary_pred)
+   
+   找到一组相邻元素满足二元谓词binary_pred
+   
+   返回该元素的位置的迭代器
+   
+   + find_end(InputIterator first1,InputIterator last1,InputIterator first2,InputIterator last2)
+   + find_first_of(InputIterator first1,InputIterator last1,InputIterator first2,InputIterator last2)
+2. + count(InputIterator first,InputIterator last,const T& value)
+
+   找出区间内与value相等的元素个数
+   
+   返回个数
+   + count_if(InputIterator first,InputIterator last,**predicate** pred)
+   
+   找出区间内符合一元谓词pred的元素个数
+   
+   返回个数
+3. for_each(InputIterator first,InputIterator last,**Function** f)
+
+   将仿函数f施行于区间内所有元素
+   
+   返回last（无用）
+4. search(ForwardIterator first1,ForwardIterator last1,ForwardIterator first2,ForwardIterator last2)
+
+   在序列一中找到序列二首次出现的的位置
+   
+   返回迭代器
+5. + remove(ForwardIterator first,ForwardIterator last,const T&value)
+
+   将与value相同的元素移除（实际上是放到序列后面）
+   
+   返回整理后最后一个与value不同的下一元素
+   + remove_if(ForwardIterator first,ForwardIterator last,predicate pred)
+6. transform(InputIterator first,InputIterator last,OutputIterator result,**Unaryoperation** op)
+
+   将仿函数op作用于区间内的所有元素，并将修改后的序列输出在起始为result的容器中（result可以等于first）
+   
+   返回last（无用）
+7. max_element(ForwardIterator first,ForwardIterator last,**compare**comp)
+
+   找到区间中的最大值，大小由仿函数comp判定（默认是less_then）
+   
+   返回最大值的迭代器
+8. unique(ForwardIterator first,ForwardIterator last)
+
+   移除相邻的重复元素（需要先排序）可以保证稳定
+   
+   返回一个指向不重复区间尾端的迭代器
+9. replace(ForwardIterator first,ForwardIterator last,const T& old_val,const T& new_val)
+
+   将区间中的所有old_val替换成new_val
+   
+   返回last无用
+10. sort(RandomAccessIterator first,RandomAccessIterator last)
+
+   将区间排序，其相对大小由迭代器所指元素的大小规定
+   
+   返回last无用
+
+测试用例：
+```c++
+```
