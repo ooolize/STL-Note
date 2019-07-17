@@ -43,3 +43,5 @@ back_inserter_iterator<container>& back_inserter(container& c){
 return back_inserter_iterator(c);
 }
 ```
+
+在这个函数中，我们并没有使用重载的operator+,而是仅仅多了一层间接性。它实现的是auto p=back_inserter(c);而不是* p=12;
