@@ -44,4 +44,31 @@ return back_inserter_iterator(c);
 }
 ```
 
-在这个函数中，我们并没有使用重载的operator+,而是仅仅多了一层间接性。它实现的是auto p=back_inserter(c);而不是* p=12;
+在这个函数中，我们并没有使用重载的operator+,而是仅仅多了一层间接性。它实现的是
+auto p=back_inserter(c);而不是* p=12;
+
+ostream_iterator内部维护一个ostream和一个储存间隔的char,重载operator=来实现对流的控制。
+
+```c++
+template<class T>
+class ostream_iterator{
+typedef void value_type;
+typedef void difference_type;
+typedef void reference_type;
+typedef void pointer_type;
+typedef output_iterator_tag iterator_category;
+protect:
+ostream* os;
+const char * c;
+public:
+ostream_iterator(ostream& os=cout,const char *c=''):os(os),c(c){}
+ostream_iterator<T>& operator=(const T&value)const{
+*os<<value;
+if(c) *os<<c;
+return *this;
+}
+
+ostream_iterator<T>& operator*(){return *this;}
+ostream_iterator<T>& operator++(){return *this;}
+};
+```
