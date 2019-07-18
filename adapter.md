@@ -72,3 +72,9 @@ ostream_iterator<T>& operator*(){return *this;}
 ostream_iterator<T>& operator++(){return *this;}
 };
 ```
+eg： ostream_iterator<int> oite(cout,' ');
+     copy(v.begin(),v.end(),oite);
+
+在copy函数内部，采用* result=* first的方法复制，这里result就是oite(ostream_iterator),而* first就是容器内存储的元素值。
+整个式子调用operator=控制流的输出。所谓的* result仅仅是做个样子，实际上与result=* first无异。
+  
