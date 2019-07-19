@@ -61,11 +61,24 @@ void destory(ForwardIterator first,ForwardIterator last){
 ```c++
 template<class ForwardIterator,class T>
 void __destory(ForwardIterator first,ForwardIterator last,T*){
-typedef ty
+typedef tyname __type_triats<T>::has_trivial_destructor trivial_desturctor;
+__destory_aux(first,last,trivial_desturctor());
+}
+```
+//__destory_aux具体执行操作
+
+```c++
+template<class ForwardIterator>
+void __destory_aux(ForwardIterator first,ForwardIterator last,__false_type){
+for(;first!=last,++first)
+    destory(&*first);//哦豁 是T*哦，first可不是指针
 }
 ```
 
-
+```c++
+template<class ForwardIterator>
+void __destory_aux(ForwardIterator first,ForwardIterator last,__true_type){}
+```
 ---
 ### Todo
 + 找时间研究一下operator new
