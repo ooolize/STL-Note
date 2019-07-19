@@ -38,7 +38,32 @@ new(p)T1(value);
 ```
 2. destory()
 
-销毁函数有
+销毁函数有两个版本，版本一使用销毁指针所指元素
+
+```c++
+template<class T>
+void destory(T* pointer){
+  pointer->~T();
+}
+```
+
+版本二使用一对指针，销毁区间内所有元素。采用type_traits技法判断元素的析构函数是否是trivial的，以分别处理提高效率
+想要使用该方法还要获得元素的类型，这就又增加的一层间接性。
+//destory只是一个接口函数
+```c++
+template<class ForwardIterator>
+void destory(ForwardIterator first,ForwardIterator last){
+ __destory(first,last,value_type(first));
+}
+```
+//__destory判断析构函数是否是trivial的
+
+```c++
+template<class ForwardIterator,class T>
+void __destory(ForwardIterator first,ForwardIterator last,T*){
+typedef ty
+}
+```
 
 
 ---
