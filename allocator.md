@@ -80,6 +80,8 @@ for(;first!=last,++first)
 template<class ForwardIterator>
 void __destory_aux(ForwardIterator first,ForwardIterator last,__true_type){}
 ```
+
+3. alloc:内存的分配与释放
 ---
 ### Todo
 + 找时间研究一下operator new
