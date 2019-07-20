@@ -82,7 +82,16 @@ void __destory_aux(ForwardIterator first,ForwardIterator last,__true_type){}
 ```
 
 3. alloc:内存的分配与释放
+
+为了解决内存破碎问题，内存管理使用双层配置器，如果__USE_MALLOC定义，那么仅使用第一层，反之，则仅使用第二层。
+还设计了标准接口类simple_alloc,这仅是对已有函数的引用包装。
+
++ 一层配置器:__malloc__alloc_template
+
+一层配置器直接使用malloc与realloc进行分配和释放
+
 ---
 ### Todo
 + 找时间研究一下operator new
 + ①存疑 为什么要使用两个类型?
++ 为什么是void* 
