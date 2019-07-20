@@ -138,9 +138,35 @@ union obj{
 static obj* volatile free_list[__NFREELISTS];
 static void *refill (size_t n);
 static char* chunk_alloc(size_t n,size_t types);
+
+static char* start_free;
+static char* end_free;
+static size_t heap_size;
+
+public:
+static void* allocate(size_t n);
+static void deallocate(void* p,size_t n);
 };
 
+tempalte<class init>
+void* __default_malloc_template::allocate(size_t n){
+     if(n>__MAX_BYTES) return malloc_alloc::allocate(n);
+     obj* result;
+     size_t index=FREELIST_INDEX(ROUND_UP(n));
+     obj*volatile* my_free_list=free_list+index;
+     result=my_free_list;
+     *my_free_list=result->free_list_link;
+     return result;
+}
 
+template<class init>
+void  __deafult_malloc_template::deallocate(void * p,size_t n){
+     size_t index=FREELIST_INDEX(n);
+     obj* q=(obj*)p  //why?
+     obj* volatile* my_free_list=free_list+index;
+     q->free_list_link=(*my_free_list);
+     (*my_free_list)=q;
+}
 ```
 
 ---
@@ -151,3 +177,4 @@ static char* chunk_alloc(size_t n,size_t types);
 + 内存不足的c++ new handle处理机制
 + union类型，enum类型
 + 全是static的？
++ free_list节点到底是怎样子的呢
