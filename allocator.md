@@ -89,6 +89,20 @@ void __destory_aux(ForwardIterator first,ForwardIterator last,__true_type){}
 + 一层配置器:__malloc__alloc_template
 
 一层配置器直接使用malloc与realloc进行分配和释放
+```c++
+template<int init>
+class __malloc__alloc_template{
+public:
+static void* oom_malloc(size_t) //内存
+void* allocate (size_t n){
+void* result=malloc(n);
+if(result==0){
+oom_malloc(n);
+return result;
+}
+}
+};
+```
 
 ---
 ### Todo
