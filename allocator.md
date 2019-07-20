@@ -93,15 +93,54 @@ void __destory_aux(ForwardIterator first,ForwardIterator last,__true_type){}
 template<int init>
 class __malloc__alloc_template{
 public:
-static void* oom_malloc(size_t) //内存
+static void* oom_malloc(size_t n) //内存不足处理
 void* allocate (size_t n){
 void* result=malloc(n);
 if(result==0){
-oom_malloc(n);
-return result;
+   oom_malloc(n);
+   return result;
+  }
 }
+void deallocate(void* p){
+    free(p);
 }
 };
+```
+
+二层配置器有16个档位(0-128)的块大小，每个档位都有很多连续的单位区块，我们构建
+一个自由链表(free list)存储每个档位的**首区块的地址**。我们分配(allocate),释放(realocate)
+重新装填(refill)实际上都是简单的在链表中删除或增加元素。
+
+在实际实现中，我们需要一些辅助函数
+> + ROUND_UP将所需的大小调至8的整数倍
+> + FREELIST_INDEX所需大小通过除8得到索引值(即档位)
+
+以下是具体实现，为了节约成本，对自由链表的节点采用union，实现了allocate,deallocate,
+refill,chunk_alloc函数
+
+```c++
+enum{__ALIGN =8};
+enum{__MAX_BYTES=128};
+enum{__NFREELIST=__MAX_BYTES/__ALIGN};
+template<int init>
+class __default_alloc_template{ 
+private:
+static size_t ROUND_UP(size_t bytes){
+      return ((bytes)+__ALIGN-1)&~(__ALIGN-1));
+}
+static size_t FREELIST_INDEX(size_t bytes){
+      return (bytes+__ALIGN-1)/__ALIGN-1;
+}
+union obj{
+     union obj* free_list_link;
+     chat client_data[1];
+}
+static obj* volatile free_list[__NFREELISTS];
+static void *refill (size_t n);
+static char* chunk_alloc(size_t n,size_t types);
+};
+
+
 ```
 
 ---
@@ -109,3 +148,6 @@ return result;
 + 找时间研究一下operator new
 + ①存疑 为什么要使用两个类型?
 + 为什么是void* 
++ 内存不足的c++ new handle处理机制
++ union类型，enum类型
++ 全是static的？
