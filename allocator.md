@@ -147,7 +147,10 @@ public:
 static void* allocate(size_t n);
 static void deallocate(void* p,size_t n);
 };
+```
+相当于在free_list中删除一个节点
 
+```c++
 tempalte<class init>
 void* __default_malloc_template::allocate(size_t n){
      if(n>__MAX_BYTES) return malloc_alloc::allocate(n);
@@ -158,7 +161,10 @@ void* __default_malloc_template::allocate(size_t n){
      *my_free_list=result->free_list_link;
      return result;
 }
+```
+相当于在free_list中增加一个节点
 
+```c++
 template<class init>
 void  __deafult_malloc_template::deallocate(void * p,size_t n){
      size_t index=FREELIST_INDEX(n);
@@ -166,6 +172,32 @@ void  __deafult_malloc_template::deallocate(void * p,size_t n){
      obj* volatile* my_free_list=free_list+index;
      q->free_list_link=(*my_free_list);
      (*my_free_list)=q;
+}
+```
+相当于在free_list中增加一系列节点，如果内存只够一块，直接返回，否则先返回第一个区块
+后面的储存在自由链表中
+```c++
+template<class init>
+void* __default_alloc_template::refill(size_t n){
+     obj* result,*current_node,*next_node,*my_free_list;
+     int  nobjs=20;
+     my_free_list=free_list+FREELIST_INDEX(n);
+     char* chunk=chunk_alloc(n,nobjs);//引用传递
+     if(nobjs==1)return chunk;
+     
+     reault=chunk;
+     *my_free_list=next_node=(obj*)(chunk+n);
+     for(int i=0;;i++){//
+        current_node=next_node;
+        next_node=(obj*)(next_node+n);//找出新节点的位置
+        if(i==nobjs-1){
+            current_node->free_list_link=0;
+            break;
+        }
+        else
+            current_node->free_list_link=next_node;//将新节点和旧节点连起来
+     }
+     return result;
 }
 ```
 
