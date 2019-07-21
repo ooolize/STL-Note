@@ -201,6 +201,28 @@ void* __default_alloc_template::refill(size_t n){
 }
 ```
 
+```c++
+template<int init>
+char* __default_alloc_template<init>::chunk_alloc(size_t n,int& nobjs){//返回值怎么是char*啊
+    char* result;
+    size_t total_bytes=n*nobjs;
+    size_t bytes_left=end_free-start_free;
+    
+    if(bytes_left>=total_bytes){
+        result=start_free;
+        start+=total_bytes;
+        return result;
+    }
+    else_if(bytes_left>=n){
+        size_t size=bytes_left/n;
+        size_t use_size=size*n;
+        result=start_free+use_size;
+        bytes_left=end_free-result;
+        return result;
+    }
+    else
+}
+```
 ---
 ### Todo
 + 找时间研究一下operator new
