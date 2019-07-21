@@ -200,7 +200,7 @@ void* __default_alloc_template::refill(size_t n){
      return result;
 }
 ```
-
+内存池控制
 ```c++
 template<int init>
 char* __default_alloc_template<init>::chunk_alloc(size_t n,int& nobjs){//返回值怎么是char*啊
@@ -220,7 +220,16 @@ char* __default_alloc_template<init>::chunk_alloc(size_t n,int& nobjs){//返回�
         bytes_left=end_free-result;
         return result;
     }
-    else
+    else{
+        size_t bytes_to_get=2*total_bytes+ROUND_UP(heap_size>>4);//why?
+        if(bytes_left>0){
+            obj*volatile*my_free_list=free_list+FREELIST_INDEX(bytes_left);
+            (obj*)start_free->free_list_link=*my_free_list;//start_free有下一个obj*吗？哪里定义了
+            *my_free_list=(obj*)start_free;
+        }    
+    }
+    
+    ...
 }
 ```
 ---
