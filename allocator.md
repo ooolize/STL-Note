@@ -232,6 +232,18 @@ char* __default_alloc_template<init>::chunk_alloc(size_t n,int& nobjs){//返回�
     ...
 }
 ```
+4. 内存基本处理函数
+> STL定义有五个全局函数，作用于未初始化的空间上，除去前面介绍的construt,destory.我们还有uninitialized_copy，uninitialized_fill,uninitialized_fill_n,分别对应STL算法中的copy,fill_n,fill。他们在memory头文件中。
+
++  uninitialized_copy()
+
+前两个参数是copy的内容，第三个参数是copy的位置。对输入范围内的每一个迭代器i，该函数会调用construct(&* (result+i-first),* i)
+这种构造函数，在容器的实现上有很大帮助。 c++标准还要求，该函数具有"commit or rollback"语义，即要不全部复制成功，有一个失败那么
+不会构造任何东西。
+
+```c++
+```
+
 ---
 ### Todo
 + 找时间研究一下operator new
