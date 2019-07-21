@@ -241,7 +241,12 @@ char* __default_alloc_template<init>::chunk_alloc(size_t n,int& nobjs){//返回�
 这种构造函数，在容器的实现上有很大帮助。 c++标准还要求，该函数具有"commit or rollback"语义，即要不全部复制成功，有一个失败那么
 不会构造任何东西。
 
+具体实现中使用__type_triats的老把戏
 ```c++
+template<class ForwardIterator,class InputIterator>
+ForwardIterator uninitialized_copy(InputIterator first,InputIterator last,ForwardIterator result){
+        return __uninitialized_copy(first,last,result,value_type(first));
+}
 ```
 
 ---
