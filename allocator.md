@@ -269,6 +269,77 @@ ForwardIterator  __unitialized_copy_aux(InputIterator first,InputIterator last,F
 }
 ```
 
+2. uninitialized_fill_n
+
+> 第一个参数first指定填充的地址，第二个n和第三个参数x确定填充数量和数值。对于first,first+n范围内的给个迭代器i, 
+都调用construct(&* i,x)。该函数也具有"commit or rollback"语义。
+
+具体实现也是这样，采用__type_traits提取型别，以提高效率。POD意指Plain Old Data，也就是标量类型，或传统的C struct
+型别，POD型别必然拥有trivial ctor/dotr/copy/assignment函数，对POD型别采用最有效率的初值填写。
+
+```c++
+template<class ForwardIterator first，class T,class Size>
+ForwardIterator uninitialized_fill_n(ForwardIterator first,Size n,const T& x){
+    return __uninitialized_fill_n(first,n,x,value_type(T));
+}
+
+template<class ForwardIterator first，class T,class Size>
+ForwardIterator uninitialized_fill_n(ForwardIterator first,Size n,const T& x,T*){
+    typedef typename __type_traits<T>::POD_type  is_POD;
+    return __uninitialized_fill_n_aux(first,n,x,is_POD());
+}
+
+template<class ForwardIterator first，class T,class Size>
+ForwardIterator uninitialized_fill_n(ForwardIterator first,Size n,const T& x,__true_type){
+    return fill_n(first,n,x);
+}
+
+template<class ForwardIterator first，class T,class Size>
+ForwardIterator uninitialized_fill_n(ForwardIterator first,Size n,const T& x,__false_type){
+    ForwardIterator cur=first;
+    for(;n>0;n--,cur++){
+        construct(&*cur,x)
+    }
+    return cur;
+    return 
+}
+```
+3. uninitialized_fill
+
+> 第一个参数first和第二参数last指定填充的地址，第三个参数x确定填充数值。对于first,last范围内的给个迭代器i, 
+都调用construct(&* i,x)。该函数也具有"commit or rollback"语义。
+
+具体实现也是这样，采用__type_traits提取型别，以提高效率。POD意指Plain Old Data，也就是标量类型，或传统的C struct
+型别，POD型别必然拥有trivial ctor/dotr/copy/assignment函数，对POD型别采用最有效率的初值填写。
+
+```c++
+tempalte<class ForwardIterator,class T>
+void uninitialized_fill(ForwardIterator first,ForwardIterator last,const T& x){
+    __uninitialized_fill(first,last,T,value_type(first));
+}
+
+tempalte<class ForwardIterator,class T,class T1>
+void__uninitialized_fill(ForwardIterator first,ForwardIterator last,const T& x,T1*){
+    typedef typename __type_traits<T1>::is_POD is_POD;
+    __uninitialized_fill__n(first,last,x,is_POD());
+}
+
+tempalte<class ForwardIterator,class T>
+void __uninitialized_fill_aux(ForwardIterator first,ForwardIterator last,const T& x,__true_type){
+    fill(first,last,x);
+}
+
+tempalte<class ForwardIterator,class T>
+void __uninitialized_fill_aux(ForwardIterator first,ForwardIterator last,const T& x,__false_type){
+    ForwardIterator cur=first;
+    for(;cur!=last;cur++){
+        construct(&*cur,x);
+    }
+}
+
+
+```
+
 ---
 ### Todo
 + 找时间研究一下operator new
