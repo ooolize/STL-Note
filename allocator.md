@@ -247,6 +247,26 @@ template<class ForwardIterator,class InputIterator>
 ForwardIterator uninitialized_copy(InputIterator first,InputIterator last,ForwardIterator result){
         return __uninitialized_copy(first,last,result,value_type(first));
 }
+
+template<class ForwardIterator,class InputIterator,class T>
+ForwardIterator __uninitialized_copy(InputIterator first,InputIterator last,ForwardIterator result,T*){
+    typedef typename __type_trais<T>::is_POD_type is_POD;
+    return __unitialized_copy(first,last,result,is_POD);
+}
+
+template<class ForwardIterator,class InputIterator>
+ForwardIterator __unitialized_copy_aux(InputIterator first,InputIterator last,ForwardIterator result,__true_type){
+    return copy(first,last,result);
+}
+//STL在此处加了cur表示first的副本，最后返回cur,有何意义。
+template<class ForwardIterator,class InputIterator>
+ForwardIterator  __unitialized_copy_aux(InputIterator first,InputIterator last,ForwardIterator result,__false_type){
+    for(;first!=;last;first++){
+        construct(&*first,*first);
+    }
+    return first;
+
+}
 ```
 
 ---
