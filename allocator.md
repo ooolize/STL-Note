@@ -301,7 +301,6 @@ ForwardIterator uninitialized_fill_n(ForwardIterator first,Size n,const T& x,__f
         construct(&*cur,x)
     }
     return cur;
-    return 
 }
 ```
 3. uninitialized_fill
